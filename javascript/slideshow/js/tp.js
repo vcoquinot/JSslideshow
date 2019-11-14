@@ -21,11 +21,8 @@ window.onload = () => {
             
             //Ajout des événements
             this.addEvents();
-
-            
-            //animation du slideshow
-            this.slide();
         }
+        
         createImages() {
             //parcours du tableau
             for (let i = 0; i < this.images.length; i++) {
@@ -42,12 +39,17 @@ window.onload = () => {
         //Ajout des événements
         addEvents () {
             //ajout de l'événement onclick au container
-            this.slideShowContainer.onclick = function () {
+            //si isRunning est faux, on le passe à true et on relance this.slide()
+            //si isRunnig est vrai, on le passe à false
+            this.slideShowContainer.onclick = () => {
                 console.log('click container');
-                
-                this.isRunning = true;
-                
-                this.slide();
+                if (this.isRunning){
+                    this.isRunning = false;
+                } else{
+                    this.isRunning = true;                                    
+                    this.slide();
+                }
+   
             }
         }
         
