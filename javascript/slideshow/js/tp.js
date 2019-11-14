@@ -14,7 +14,10 @@ window.onload = () => {
             this.slideShowContainer = document.getElementById(slideshowId);
 
             //création des ilages
-            this.createImages();
+            this.createImages();            
+            
+            //animation du slideshow
+            this.slide();
         }
         createImages() {
             //parcours du tableau
@@ -27,6 +30,17 @@ window.onload = () => {
                 this.slideShowContainer.appendChild(img)
             }
         }
+        
+        //on fait tourner les images
+        slide() {
+            setTimeout(() => {
+                //récupération de la première image
+            const firstImg = document.querySelector("#slideshow > img");
+            //placement de la première image comme dernier fils de slideShow container
+            this.slideShowContainer.appendChild(firstImg);
+            //Appel récursif
+            this.slide();                
+            }, 2000);
     }
     //instanciation du slideshow
     const slideShow1 = new Slideshow("slideshow");
