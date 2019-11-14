@@ -11,10 +11,17 @@ window.onload = () => {
                 {"src": "img/img3.jpg"}
             ];
             //élément parent du slideshow
-            this.slideShowContainer = document.getElementById(slideshowId);
+            
+            //slideShow en action ?
+            this.isRunning = false;
 
-            //création des ilages
-            this.createImages();            
+            //création des images
+            this.createImages(); 
+            
+            
+            //Ajout des événements
+            this.addEvents();
+
             
             //animation du slideshow
             this.slide();
@@ -31,17 +38,34 @@ window.onload = () => {
             }
         }
         
+                
+        //Ajout des événements
+        addEvents () {
+            //ajout de l'événement onclick au container
+            this.slideShowContainer.onclick = function () {
+                console.log('click container');
+                
+                this.isRunning = true;
+                
+                this.slide();
+            }
+        }
+        
+        
         //on fait tourner les images
         slide() {
-            setTimeout(() => {
-                //récupération de la première image
-            const firstImg = document.querySelector("#slideshow > img");
-            //placement de la première image comme dernier fils de slideShow container
-            this.slideShowContainer.appendChild(firstImg);
-            //Appel récursif
-            this.slide();                
-            }, 2000);
-    }
+            if (this.isRunning) {
+                setTimeout(() => {
+                    //récupération de la première image
+                    const firstImg = document.querySelector("#slideshow > img");
+                    //placement de la première image comme dernier fils de slideShow container
+                    this.slideShowContainer.appendChild(firstImg);
+                    //Appel récursif
+                    this.slide();
+                }, 2000);
+            }
+        }
+        
     //instanciation du slideshow
     const slideShow1 = new Slideshow("slideshow");
     slideShow1.createImages();
