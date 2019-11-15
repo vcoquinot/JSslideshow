@@ -1,0 +1,41 @@
+class ManageImages {
+    constructor() {
+        this.images = [];
+        this.container = document.getElementById("slideshow");
+
+        //appel de fetchImages
+        //Méthode qui renvoie une promesse car fetch (passage par réseau)
+        this.fetchImages(this.createImages);//étape 1: fetch, quand 1 ok étape 2 create
+    }
+    //Création des images
+    createImages = () => {
+        console.log('Dans createImages');
+        //Parcourir tableau et création à la volée
+        //des éléments img
+        for (let i = 0; i < this.images.length; i++) {
+            const img = document.createElement("img");
+            img.setAttribute("src",this.images[i].download_url);
+            this.container.appendChild(img);
+        }
+    }
+
+    fetchImages = (success) => {
+        console.log('Dans fetchImages');
+        fetch("https://picsum.photos/v2/list")
+        //promise
+        .then((reponse)=> {
+            //si positive je vais dans .then avec ma donnée
+            reponse.json( ).then((data) => {
+                console.log('data : ', data);
+                //stockage des données dans this.images
+                this.images = data;
+                success();
+            })
+        })
+        .catch((error) => {
+            console.log("Erreur catchée :", error);
+        })
+    }
+}
+const mi = new ManageImages;
+
