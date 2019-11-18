@@ -1,90 +1,65 @@
-window.onload = () => {
-    //console.log("chargement");
-    // figcaption = document.querySelector("figcaption");
-    // console.log(figcaption);
+class Slideshow {
+    constructor() {
+        this.images = [
+            { src: "images/ella.jpg" },
+            { src: "images/miriam.jpg" },
+            { src: "images/nina.jpg" }
+        ]
+        this.authors = [
+            { name: "1" },
+            { name: "2" },
+            { name: "3" }
+        ]
 
-    //création classe
-    class Slideshow {
-        constructor(slideshowId) {
-            // images du slideshow
-            this.images = [
-                { "src": "img/img1.jpg" },
-                { "src": "img/img2.jpg" },
-                { "src": "img/img3.jpg" }
-            ];
-
-            //élément parent du slideshow
-            this.slideShowContainer = document.getElementById(slideshowId);
-
-            //slideShow en action ?
-            this.isRunning = false;
-
-            //création des images
-            this.createImages();
-
-            //Ajout des événements
-            this.addEvents();
-
-            //timeOut en cours
-            this.timeout = "";
-
-            //animation du slideshow
-            this.slide();
-        }
-
-
-        createImages() {
-            //parcours du tableau
-            for (let i = 0; i < this.images.length; i++) {
-
-                //créatiion d'un élément image dans le DOM
-                const img = document.createElement("img");
-
-                //création d'un élément figcaption
-                const figcaption = document.createElement("figcaption");
-
-                //ajout de l'attribut src
-                img.setAttribute("src", this.images[i].src);
-                
-                //positionnement dans le dom
-                this.slideShowContainer.appendChild(img)
-            }
-        }
-
-        //Ajout des événements
-        addEvents() {
-            //ajout de l'événement onclick au container
-            //si isRunning est faux, on le passe à true et on relance this.slide()
-            //si isRunnig est vrai, on le passe à false
-            this.slideShowContainer.onclick = () => {
-                console.log('click container');
-                if (this.isRunning){
-                    this.isRunning = false;
-                    window.clearTimeout(this.timeout);
-                } else{
-                    this.isRunning = true;                                    
-                    this.slide();
-                }
-            }
-        }
-
-        //on fait tourner les images
-        slide() {
-            if (this.isRunning) {
-                this.timeout = setTimeout(() => {
-                    //récupération de la première image
-                    const firstImg = document.querySelector("#slideshow > img");
-                    //placement de la première image comme dernier fils de slideShow container
-                    this.slideShowContainer.appendChild(firstImg);
-                    //Appel récursif
-                    this.slide();
-                }, 2000);
-            }
-        }
-
+        this.div_slideshow = document.getElementById("slideshow");
+        this.start = false;
+        this.renderImages();
+        this.createEvent();
     }
-    //instanciation du slideshow
-    const slideShow1 = new Slideshow("slideshow");
-    slideShow1.createImages();
-}
+    renderImages() {
+        for (let img of this.images) {
+            this.createImage(img.src);
+        }
+    }
 
+    createImage(path) {           
+        //création balise image et attributs
+        const img = document.createElement("img")
+        img.setAttribute("src", path); 
+        this.div_slideshow.appendChild(img);       
+
+        //creation balise figcaption
+        const figcaption = document.createElement("figcaption");
+        //positionnement      
+        this.div_slideshow.appendChild(figcaption);
+        for (let author of this.authors) {
+            figcaption.innerHTML = (author.name);               
+       }    
+    }
+
+    createEvent() {
+        console.log('dans createEvent');
+        this.div_slideshow.onclick =  () => {
+            console.log('click sur le slideshow');
+            if (this.start) {
+                this.start = false;
+            } else {
+                this.start = true;
+                this.animateSlideshow();
+            }
+        };
+    }
+    animateSlideshow() {
+        console.log('dans animateSlideshow');
+        let first_img = document.querySelector("#slideshow > img");
+        if(this.start) setTimeout(() => {
+            this.div_slideshow.appendChild(first_img);
+            this.animateSlideshow();
+        }, 2000);
+    }
+    stopSlideshow() {
+        console.log('dans stopSlideshow');
+    }
+
+}
+const ss = new Slideshow(); 
