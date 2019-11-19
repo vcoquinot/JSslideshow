@@ -1,14 +1,126 @@
+
+//V1
+à reprendre
+
+window.onload = () => {
+    //console.log("chargement");
+    // figcaption = document.querySelector("figcaption");
+    // console.log(figcaption);
+
+    //création classe
+    class Slideshow {
+        constructor(slideshowId) {
+            // images du slideshow
+            this.images = [
+                { "src": "img/img1.jpg" },
+                { "src": "img/img2.jpg" },
+                { "src": "img/img3.jpg" }
+            ];
+
+            //élément parent du slideshow
+            this.slideShowContainer = document.getElementById(slideshowId);
+
+            //slideShow en action ?
+            this.isRunning = false;
+
+            //création des images
+            this.createImages();
+
+            //Ajout des événements
+            this.addEvents();
+
+            //timeOut en cours
+            this.timeout = "";
+
+            //animation du slideshow
+            this.slide();
+        }
+
+        //création des figures
+        createFigures = () => {
+            console.log('Dans createFigures');
+            for (let i = 0; i < this.images.length; i++) {
+                //créatiion d'un élément image dans le DOM
+                const figure = document.createElement("figure");
+                this.slideShowContainer.appendChild(figure);
+
+                //création de l'image et insertion dasn la balise figure
+                this.createImage(i, figure);
+                //création de la légende et insertion dasn la balise figure
+                this.createFigCaption (i, figure);
+            }
+        }
+
+        //Création d'une image à placer dans une figure
+        createImage = (index, figure) => {
+            console.log('Dans createImage');
+
+            //créatiion d'un élément image dans le DOM
+            const img = document.createElement("img");
+
+            //ajout de l'attribut src
+            img.setAttribute("src", this.images[index].src);
+               
+            //positionnement dans le dom
+            figure.appendChild(img)            
+        }
+
+        createFigCaption = (index, figure) => {
+            console.log('Dans createFigCaption');
+            //création balise
+            const figcaption = document.createElement("figcaption");
+            //Insertion nom d'auteur par image dans le figcaption
+            figcaption.textContent =(this.images)[index].author;
+            //positionnement
+            figure.appendChild(figcaption);
+        }
+
+        //Ajout des événements
+        addEvents() {
+            //ajout de l'événement onclick au container
+            //si isRunning est faux, on le passe à true et on relance this.slide()
+            //si isRunnig est vrai, on le passe à false
+            this.slideShowContainer.onclick = () => {
+                console.log('click container');
+                if (this.isRunning){
+                    this.isRunning = false;
+                    window.clearTimeout(this.timeout);
+                } else{
+                    this.isRunning = true;                                    
+                    this.slide();
+                }
+            }
+        }
+
+        //on fait tourner les images
+        slide() {
+            if (this.isRunning) {
+                this.timeout = setTimeout(() => {
+                    //récupération de la première image
+                    const firstImg = document.querySelector("#slideshow > img");
+                    //placement de la première image comme dernier fils de slideShow container
+                    this.slideShowContainer.appendChild(firstImg);
+                    //Appel récursif
+                    this.slide();
+                }, 2000);
+            }
+        }
+
+    }
+    //instanciation du slideshow
+    const slideShow1 = new Slideshow("slideshow");
+    slideShow1.createImages();
+}
+
+======================================================================================================================================================================
+
+---------------------------------------------------------------
 class Slideshow {
     constructor() {
         this.images = [
             { src: "images/ella.jpg" },
             { src: "images/miriam.jpg" },
             { src: "images/nina.jpg" }
-        ]
-        this.authors = [
-            { name: "1" },
-            { name: "2" },
-            { name: "3" }
         ]
 
         this.div_slideshow = document.getElementById("slideshow");
